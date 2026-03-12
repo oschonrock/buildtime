@@ -5,9 +5,15 @@ CXXFLAGS=${CXXFLAGS:---std=c++23}
 
 if [[ "$1" == "--pch" ]]
 then
-    for prg in iostream format print; do
+    for prg in iostream format print fmtformat fmtformat; do
 	echo -n "building $prg.h.gch: ";
-	(time -p $CXX $CXXFLAGS -x c++-header $prg.h) 2>&1 | egrep real | awk '{print $2}'
+	if [[ "$prg" == "fmt"* ]]
+	then
+	    CXXF="$CXXFLAGS -Ifmt/include -Lfmt/build";
+	else
+	    CXXF="$CXXFLAGS"
+	fi
+	(time -p $CXX $CXXF -x c++-header $prg.h) 2>&1 | egrep real | awk '{print $2}'
     done
 else
     rm -f *.gch
@@ -15,9 +21,18 @@ fi
 
 mkdir -p build
 
-for prg in puts printf iostream format print; do
+# for prg in puts printf iostream format print; do
+for prg in puts printf iostream format print fmtformat fmtprint; do
     echo -n "$prg: ";
-    (time -p $CXX $CXXFLAGS -o build/$prg $prg.cpp) 2>&1 | egrep real | awk '{print $2}' | tr "\n" "s"
+    if [[ "$prg" == "fmt"* ]]
+    then
+	CXXF="$CXXFLAGS -Ifmt/include -Lfmt/build";
+	LDFLAGS="-lfmt" # need to go after the source
+    else
+	CXXF="$CXXFLAGS"
+    fi
+    
+    (time -p $CXX $CXXF -o build/$prg $prg.cpp $LDFLAGS) 2>&1 | egrep real | awk '{print $2}' | tr "\n" "s"
     echo -n " => "
     ls -sh build/$prg | awk '{print $1}'
 done
