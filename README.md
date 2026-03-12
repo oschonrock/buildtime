@@ -1,8 +1,6 @@
 # buildtime
 simple tests for build time of basic c/c++ io functions - optionally using PCH
 
-right now this is configured for `g++-14`
-
 to use:
 
 ```bash 
@@ -38,5 +36,14 @@ printf: 0.05s => 16K
 iostream: 0.52s => 24K
 format: 1.16s => 236K
 print: 1.20s => 236K
+```
+
+right now this is configured to default to `g++-14 --std=c++23`
+
+you can customize that with, eg:
+
+```bash 
+CXX=g++-15 CXXFLAGS=--std=c++26 ./buildtime.sh
+
 ```
 
