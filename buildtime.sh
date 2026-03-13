@@ -27,12 +27,14 @@ for prg in puts printf iostream format print fmtformat fmtprint; do
     if [[ "$prg" == "fmt"* ]]
     then
 	CXXF="$CXXFLAGS -Ifmt/include -Lfmt/build";
-	LDFLAGS="-lfmt" # need to go after the source
+	LDFLAGS="-lfmt" # needs to go after the source
     else
 	CXXF="$CXXFLAGS"
+	LDFLAGS="-lstdc++exp"
     fi
     
     (time -p $CXX $CXXF -o build/$prg $prg.cpp $LDFLAGS) 2>&1 | egrep real | awk '{print $2}' | tr "\n" "s"
     echo -n " => "
+    strip build/$prg
     ls -sh build/$prg | awk '{print $1}'
 done

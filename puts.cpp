@@ -1,5 +1,6 @@
 #include <cstdio>
+#include <string>
 
 int main(int argc, char** argv) {
-  puts("Hello World");
+  puts(std::string("Hello World").c_str());
 }
