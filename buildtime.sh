@@ -29,7 +29,7 @@ function run() {
     rm -f build/*
     if [[ "$1" == "--pch" ]]
     then
-	for prg in iostream format print fmtformat fmtformat; do
+	for prg in puts puts_string iostream format print fmtformat fmtformat; do
 	    echo -n "building $prg.h.$EXT: ";
 	    if [[ "$prg" == "fmt"* ]]
 	    then
@@ -45,7 +45,7 @@ function run() {
 	rm -f *.$EXT
     fi
 
-    for prg in puts printf iostream format print fmtformat fmtprint; do
+    for prg in puts puts_string iostream format print fmtformat fmtprint; do
 	echo -n "$prg: ";
 	if [[ "$prg" == "fmt"* ]]
 	then
