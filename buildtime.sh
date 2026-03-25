@@ -13,7 +13,7 @@ function run() {
     CXXFLAGS="-std=c++23"
     if [[ "$CXX" == "clang++" ]]
     then
-	# ONLY FOR clang, gcc doesn't normally support this switch
+	# only for clang, gcc usually doesn't support this switch
 	CXXFLAGS="$CXXFLAGS -stdlib=$STDLIB"
 	EXT="pch"
     else
@@ -27,9 +27,12 @@ function run() {
     cd ..
     
     rm -f build/*
+    prgs="puts puts_string iostream format print fmtformat fmtprint"
+    
     if [[ "$1" == "--pch" ]]
     then
-	for prg in puts puts_string iostream format print fmtformat fmtformat; do
+	for prg in $prgs
+	do
 	    echo -n "building $prg.h.$EXT: ";
 	    if [[ "$prg" == "fmt"* ]]
 	    then
@@ -45,7 +48,8 @@ function run() {
 	rm -f *.$EXT
     fi
 
-    for prg in puts puts_string iostream format print fmtformat fmtprint; do
+    for prg in $prgs
+    do
 	echo -n "$prg: ";
 	if [[ "$prg" == "fmt"* ]]
 	then
@@ -55,7 +59,7 @@ function run() {
 	    CXXF="$CXXFLAGS"
 	    LDFLAGS=""
 	fi
-	if [[ "$1" == "--pch" && "$CXX" == "clang++" && -e $prg.h.pch ]]
+	if [[ "$1" == "--pch" && "$CXX" == "clang++" ]]
 	then
 	    # clang needs to be told to use the pch explicitly
 	    CXXF="$CXXF -include-pch $prg.h.pch"
